@@ -40,7 +40,7 @@ else
 	BUILDDIR += build/release
 	CFLAGS += -flto -O3
 
-	ifneq ($(CC_NAME), clang)
+	ifneq ($(CC_NAME),clang)
 		CFLAGS += -s
 	endif
 
