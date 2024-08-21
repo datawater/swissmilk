@@ -21,4 +21,4 @@ jobs:
     - name: Build (Release, Aggressive optimize)
       run: make clean && make build -j RELEASE=true AGGRESSIVE_OPTIMIZE=true
     - name: Test
-      run: make test
+      run: make clean && make build -j && make test

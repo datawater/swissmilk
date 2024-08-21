@@ -122,7 +122,7 @@ $(BUILDDIR)/%.o: $(LIBSOURCEDIR)/%.c
 	$(CXX) $(CFLAGS) -fPIE -I$(HEADERDIR) -c $< -o $@
 
 .PHONY: test
-test: $(TESTEXECS)
+test: $(TESTEXECS) lib$(PROJECTNAME).a
 	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L $(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
 	./test.sh tests/
 	rm -fdr *.tmp
