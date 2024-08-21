@@ -19,15 +19,15 @@ CFLAGS = -Wall -Wextra -Werror -std=c++17 -Wno-error=attributes -Wno-error=point
 CC_NAME =
 ERROR =
 
-# ifneq ($(shell echo | $(CXX) -dM -E - | grep "__clang__"),)
-# 	CC_NAME = clang
-# else
-# 	ifneq ($(shell echo | $(CXX) -dM -E - | grep "__GNUC__"),)
-# 		CC_NAME = gnu
-# 	else
-# 		ERROR = EITHER CLANG OR GCC IS REQUIRED TO COMPILE $(PROJECTNAME).
-# 	endif
-# endif
+ifneq ($(shell echo | $(CXX) -dM -E - | grep "__clang__"),)
+	CC_NAME = clang
+else
+	ifneq ($(shell echo | $(CXX) -dM -E - | grep "__GNUC__"),)
+		CC_NAME = gnu
+	else
+		ERROR = EITHER CLANG OR GCC IS REQUIRED TO COMPILE $(PROJECTNAME).
+	endif
+endif
 
 ifeq ($(RELEASE), false)
 	CFLAGS += -g -Og -DDEBUG
