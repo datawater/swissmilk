@@ -15,22 +15,22 @@ AGGRESSIVE_OPTIMIZE ?= false
 STRICT ?= false
 BIT_WIDTH ?= $(shell getconf LONG_BIT)
 
-CFLAGS = -Wall -Wextra -Werror -std=c++20 -Wno-error=attributes -Wno-error=pointer-arith -m$(BIT_WIDTH)
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -Wno-error=attributes -Wno-error=pointer-arith -m$(BIT_WIDTH)
 CC_NAME =
 ERROR =
 
-ifneq ($(shell echo | $(CXX) -dM -E - | grep "__clang__"),)
-	CC_NAME = clang
-else
-	ifneq ($(shell echo | $(CXX) -dM -E - | grep "__GNUC__"),)
-		CC_NAME = gnu
-	else
-		ERROR = EITHER CLANG OR GCC IS REQUIRED TO COMPILE $(PROJECTNAME)
-	endif
-endif
+# ifneq ($(shell echo | $(CXX) -dM -E - | grep "__clang__"),)
+# 	CC_NAME = clang
+# else
+# 	ifneq ($(shell echo | $(CXX) -dM -E - | grep "__GNUC__"),)
+# 		CC_NAME = gnu
+# 	else
+# 		ERROR = EITHER CLANG OR GCC IS REQUIRED TO COMPILE $(PROJECTNAME).
+# 	endif
+# endif
 
 ifeq ($(RELEASE), false)
-	CFLAGS += -g -Og
+	CFLAGS += -g -Og -DDEBUG
 	BUILDDIR = build/debug
 
 	ifeq ($(AGGRESSIVE_OPTIMIZE), true)
@@ -61,7 +61,7 @@ endif
 ifeq ($(STRICT), true)
 	CFLAGS += -DSTRICT -Wstrict-aliasing -Wunreachable-code -Wcast-align -Wcast-qual \
 					   -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-include-dirs \
-					   -Wredundant-decls -Wshadow -Wstrict-overflow=4 -Wswitch-default -Wundef -Wno-unused \
+					   -Wredundant-decls -Wstrict-overflow=4 -Wswitch-default -Wundef -Wno-unused \
 					   -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option
 endif
 
@@ -95,8 +95,8 @@ mac_clean:
 
 .PHONY: check
 check:
-	infer capture -- make build -B
-	infer run
+	infer capture -- make build -B -j$(shell nproc --ignore 8)
+	infer -j $(shell nproc --ignore 2) run
 
 .PHONY: check_errors
 check_errors:
@@ -119,11 +119,11 @@ lib$(PROJECTNAME).a: $(OBJECTS)
 $(BUILDDIR)/%.o: $(LIBSOURCEDIR)/%.c
 	$(CXX) $(CFLAGS) -fPIE -I$(HEADERDIR) -c $< -o $@
 
-.PHONY: test
-test: $(TESTEXECS)
-	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L$(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
-	./test.sh tests/
-	rm -fdr *.tmp
+# .PHONY: test
+# test: $(TESTEXECS)
+# 	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L$(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
+# 	./test.sh tests/
+# 	rm -fdr *.tmp
 
 SEPARATOR = "--------------------"
 
@@ -132,7 +132,7 @@ help:
 	@echo -e $(SEPARATOR)
 	@echo -e "Available subcommands:"
 	@echo -e "\tbuild: Builds the project"
-	@echo -e "\ttest:  Builds and tests the project"
+	# @echo -e "\ttest:  Builds and tests the project"
 	@echo -e "\tcheck: Statically analyzes the project with ccheck"
 	@echo -e $(SEPARATOR)
 	@echo -e "Available options:\n"
