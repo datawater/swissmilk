@@ -15,7 +15,7 @@ AGGRESSIVE_OPTIMIZE ?= false
 STRICT ?= false
 BIT_WIDTH ?= $(shell getconf LONG_BIT)
 
-CFLAGS = -Wall -Wextra -Werror -std=c++17 -Wno-error=attributes -Wno-error=pointer-arith -m$(BIT_WIDTH)
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -Wno-error=attributes -Wno-error=pointer-arith -Wno-deprecated-copy -m$(BIT_WIDTH)
 CC_NAME =
 ERROR =
 

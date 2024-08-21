@@ -35,14 +35,6 @@ typedef float f32;
 typedef double f64;
 typedef long double fld_t;
 
-#if __SIZEOF_LONG_DOUBLE__ == 8
-typedef long double f64;
-#elif __SIZEOF_LONG_DOUBLE__ == 10
-typedef long double f80;
-#elif __SIZEOF_LONG_DOUBLE__ == 16
-typedef long double f128;
-#endif
-
 enum class ResultType { Ok, Error };
 
 template <typename O, typename E>
