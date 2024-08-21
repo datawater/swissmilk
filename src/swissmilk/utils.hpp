@@ -41,8 +41,6 @@ typedef long double f64;
 typedef long double f80;
 #elif __SIZEOF_LONG_DOUBLE__ == 16
 typedef long double f128;
-#else
-#error "Unsupported size of long double"
 #endif
 
 enum class ResultType { Ok, Error };

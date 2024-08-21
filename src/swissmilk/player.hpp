@@ -68,6 +68,8 @@ class SmPlayer {
         this->federation = SmFederation(SmFederationsEnum::NON);
         this->rating = 0;
         this->title = SmFideTitle(SmFideTitlesEnum::NoTitle);
+        this->k = DevelopmentCoefficientK::K40;
+        this->fide_id = 0;
     }
 
     friend std::ostream& operator<<(std::ostream& out, SmPlayer& player) {
@@ -75,15 +77,25 @@ class SmPlayer {
             << std::string("'\n\trating: ") << std::to_string(player.rating)
             << std::string("\n\ttitle: ") << player.get_fide_title().to_string()
             << std::string("\n\tfederation: ")
-            << player.get_federation().to_string() << std::string("\n};");
+            << player.get_federation().to_string()
+            << std::string("\n\tk_value: ")
+            << std::to_string(static_cast<int>(player.get_k()))
+            << std::string("\n\tfide_id: ")
+            << std::to_string(player.get_fide_id()) << std::string("\n};");
 
         return out;
     }
 
     inline SmPlayer(std::string name, SmFederation federation, u16 rating,
-                    SmFideTitle title)
+                    SmFideTitle title, u16 birth_year, RatingType type)
         : name(std::move(name)),
           federation(std::move(federation)),
           rating(rating),
-          title(std::move(title)) {}
+          title(std::move(title)),
+          birth_year(static_cast<u8>(birth_year - 1900)) {
+        this->k = DevelopmentCoefficientK::K40;
+        this->fide_id = 0;
+
+        this->k = this->try_guess_k(type);
+    }
 };

@@ -119,11 +119,11 @@ lib$(PROJECTNAME).a: $(OBJECTS)
 $(BUILDDIR)/%.o: $(LIBSOURCEDIR)/%.c
 	$(CXX) $(CFLAGS) -fPIE -I$(HEADERDIR) -c $< -o $@
 
-# .PHONY: test
-# test: $(TESTEXECS)
-# 	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L$(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
-# 	./test.sh tests/
-# 	rm -fdr *.tmp
+.PHONY: test
+test: $(TESTEXECS)
+	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L$(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
+	./test.sh tests/
+	rm -fdr *.tmp
 
 SEPARATOR = "--------------------"
 
@@ -132,7 +132,7 @@ help:
 	@echo -e $(SEPARATOR)
 	@echo -e "Available subcommands:"
 	@echo -e "\tbuild: Builds the project"
-	# @echo -e "\ttest:  Builds and tests the project"
+	@echo -e "\ttest:  Builds and tests the project"
 	@echo -e "\tcheck: Statically analyzes the project with ccheck"
 	@echo -e $(SEPARATOR)
 	@echo -e "Available options:\n"
@@ -141,4 +141,4 @@ help:
 	@echo -e "AGGRESSIVE_OPTIMIZE=(true | false):\n\t\tIf true, compiles with \`-O3 -mtune=native -march=native\`,"
 	@echo -e "\t\t!!!Only effective with RELEASE being true!!!. Default: false\n"
 	@echo -e "STRICT=(true | false):\n\t\tIf true, compiles in strict mode (Extra warnings). Default: true\n"
-	@echo -e "BIT_WIDTH=(16 | 32 | 64):\n\t"
+	@echo -e "BIT_WIDTH=(16 | 32 | 64): Selects the bitwidth\n\t"
