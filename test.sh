@@ -1,7 +1,7 @@
 #!/bin/bash
 
-FAILED="$(tput setaf 1) Failed!$(tput setaf 7)"
-PASSED="$(tput setaf 2) Passed!$(tput setaf 7)"
+FAILED="Failed!"
+PASSED="Passed!"
 
 TESTS=$(find . -type f -perm /111 -path "./$(basename $1)/*")
 
