@@ -3,6 +3,7 @@
 
 #include "player.hpp"
 #include "rating.hpp"
+#include "utils.hpp"
 
 // FIXME: This ignores dropping bellow 2400.
 //  K = 10 once a player's published rating has reached 2400 and remains at that
@@ -22,6 +23,10 @@ DevelopmentCoefficientK SmPlayer::try_guess_k(RatingType type) {
 
     std::time_t time = std::time(nullptr);
     std::tm* const localtime = std::localtime(&time);
+
+    if (localtime == NULL) {
+        SM_ERROR("Couldn't get local time");
+    }
 
     u16 current_year = 1900 + localtime->tm_year;
     u16 birth_year = this->get_birth_year();
@@ -57,7 +62,7 @@ f32 SmPlayer::expected_score_against_player(SmPlayer* other) {
 f32 SmPlayer::rating_change_after_game(SmPlayer* other, GameResult result) {
     // D_r = K * (S - E);
 
-    return ((double)static_cast<int>(this->k)) *
-           (((double)static_cast<int>(result)) / 2.0 -
+    return ( static_cast<double>(this->k)) *
+           ((static_cast<double>(result)) / 2.0 -
             this->expected_score_against_player(other));
 }
