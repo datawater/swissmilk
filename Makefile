@@ -123,7 +123,7 @@ $(BUILDDIR)/%.o: $(LIBSOURCEDIR)/%.c
 
 .PHONY: test
 test: $(TESTEXECS)
-	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L$(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
+	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L $(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
 	./test.sh tests/
 	rm -fdr *.tmp
 
