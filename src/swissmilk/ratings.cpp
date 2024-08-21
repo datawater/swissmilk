@@ -59,7 +59,7 @@ f32 SmPlayer::expected_score_against_player(SmPlayer* other) {
     // D_rating = 10 ** ((R_opponent - R_player) / 400)
     // E = 1 / (1 + D_rating)
 
-    f32 delta_rating = std::powf(10, (other->rating - this->rating) / 400);
+    f32 delta_rating = std::pow(10, (other->rating - this->rating) / 400);
 
     return static_cast<int>((1.0 / (1.0 + delta_rating)) * 100) / 100.0;
 }
