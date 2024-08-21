@@ -74,7 +74,9 @@ else
 endif
 
 ifneq ($(LD),)
-	CFLAGS += -fuse-ld=$(LD)
+	ifneq ($(LD),ld)
+		CFLAGS += -fuse-ld=$(LD)
+	endif
 endif
 
 main: mac_clean help
