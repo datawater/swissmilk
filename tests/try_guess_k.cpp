@@ -11,11 +11,11 @@ int main() {
     SmPlayer player_rapid =
         SmPlayer("Underage Player", SmFederation::from_string("NON"), 2050,
                  SmFideTitle::from_string("WCM"), 2010, RatingType::Rapid);
-    
+
     SmPlayer player_under_2400 =
         SmPlayer("Underage Player", SmFederation::from_string("NON"), 2399,
                  SmFideTitle::from_string("WCM"), 2000, RatingType::Classical);
-    
+
     SmPlayer player_over_2400 =
         SmPlayer("Underage Player", SmFederation::from_string("NON"), 2401,
                  SmFideTitle::from_string("WCM"), 2010, RatingType::Classical);
