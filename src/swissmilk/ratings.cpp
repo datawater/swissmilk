@@ -59,15 +59,29 @@ f32 SmPlayer::expected_score_against_player(SmPlayer* other) {
     // D_rating = 10 ** ((R_opponent - R_player) / 400)
     // E = 1 / (1 + D_rating)
 
-    f32 delta_rating = std::pow(10, (other->rating - this->rating) / 400);
+    f32 rating_diff = other->rating - this->rating;
 
-    return static_cast<int>((1.0 / (1.0 + delta_rating)) * 100) / 100.0;
+    // Clamp rating diff to 400 so Rating diff / 400 doesn't go over 1
+    if (rating_diff > 400.0) {
+        rating_diff = 400.0;
+    }
+
+    f32 rating_diff_scaled = std::pow(10, rating_diff / 400.0);
+    f32 expected_score = 1.0f / (1.0f + rating_diff_scaled);
+
+    return expected_score;
 }
 
 f32 SmPlayer::rating_change_after_game(SmPlayer* other, GameResult result) {
     // D_r = K * (S - E);
 
-    return (static_cast<double>(this->k)) *
-           ((static_cast<double>(result) / 2.0) -
-            this->expected_score_against_player(other));
+    f32 expected_score = this->expected_score_against_player(other);
+    // Round expected score to the 100th.
+    // (IDK, the FIDE calculator does it, so do I)
+    expected_score = static_cast<int>(expected_score * 100.0f) / 100.0f;
+
+    f32 score = static_cast<f32>(result) / 2.0;
+    f32 k = static_cast<f32>(this->k);
+
+    return k * (score - expected_score);
 }
