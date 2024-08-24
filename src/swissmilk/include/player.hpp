@@ -82,35 +82,28 @@ class SmPlayer {
     }
 
     bool operator<(SmPlayer& rhs) {
-        return (this->rating < rhs.rating || this->title < rhs.title ||
-                this->name < rhs.name)
-                   ? true
-                   : false;
+        return (this->rating < rhs.rating && this->title < rhs.title &&
+                this->name < rhs.name);
     }
 
     bool operator>(SmPlayer& rhs) {
-        return (this->rating > rhs.rating || this->title > rhs.title ||
-                this->name > rhs.name)
-                   ? true
-                   : false;
+        return (this->rating > rhs.rating && this->title > rhs.title &&
+                this->name > rhs.name);
     }
 
     bool operator==(SmPlayer& rhs) {
-        return (this->rating == rhs.rating || this->title == rhs.title ||
-                this->name == rhs.name)
-                   ? true
-                   : false;
+        return (this->rating == rhs.rating && this->title == rhs.title && this->name == rhs.name);
     }
 
     bool operator<=(SmPlayer& rhs) {
-        return (*this < rhs || *this == rhs) ? true : false;
+        return (*this < rhs && *this == rhs);
     }
 
     bool operator>=(SmPlayer& rhs) {
-        return (*this > rhs || *this == rhs) ? true : false;
+        return (*this > rhs && *this == rhs);
     }
 
-    bool operator!=(SmPlayer& rhs) { return (*this != rhs) ? true : false; }
+    bool operator!=(SmPlayer& rhs) { return !(*this == rhs); }
 
     inline SmPlayer() {
         this->name = std::string();
