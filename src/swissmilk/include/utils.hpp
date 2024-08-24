@@ -20,7 +20,7 @@
 #define __GET_THREAD_ID() gettid()
 
 #else  // __linux__
-#define __GET_THREAD_ID()
+#define __GET_THREAD_ID() -1
 #endif  // else __linux__
 
 #define SMATTR_PACKED __attribute__((__packed__))
