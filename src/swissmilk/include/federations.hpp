@@ -190,11 +190,11 @@ class SmFederation {
     SmFederationsEnum value;
 
    public:
-    std::string to_string() const;
-    static SmFederation from_string(std::string str);
+    std::string& to_string() const;
+    static SmFederation from_string(const std::string& str);
 
-    std::string to_long_name() const;
-    static SmFederation from_long_name(std::string str);
+    std::string& to_long_name() const;
+    static SmFederation from_long_name(const std::string& str);
 
     inline SmFederationsEnum get_value() const { return this->value; }
 

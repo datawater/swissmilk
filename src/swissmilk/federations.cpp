@@ -1,4 +1,4 @@
-#include "federations.hpp"
+#include "include/federations.hpp"
 
 #include <algorithm>
 #include <map>
@@ -274,27 +274,27 @@ static const std::map<std::string, SmFederationsEnum> federation_to_code_table =
         {"IPC", SmFederationsEnum::IPC}, {"NON", SmFederationsEnum::NON},
 };
 
-std::string SmFederation::to_string() const {
+std::string& SmFederation::to_string() const {
     auto value = std::find_if(
         federation_to_code_table.begin(), federation_to_code_table.end(),
         [this](const auto& m) { return m.second == this->get_value(); });
 
-    return value->first;
+    return const_cast<std::string&>(value->first);
 }
 
-SmFederation SmFederation::from_string(std::string str) {
+SmFederation SmFederation::from_string(const std::string& str) {
     return federation_to_code_table.at(str);
 }
 
-std::string SmFederation::to_long_name() const {
+std::string& SmFederation::to_long_name() const {
     auto value = std::find_if(
         federation_to_long_name_table.begin(),
         federation_to_long_name_table.end(),
         [this](const auto& m) { return m.second == this->get_value(); });
 
-    return value->first;
+    return const_cast<std::string&>(value->first);
 }
 
-SmFederation SmFederation::from_long_name(std::string str) {
+SmFederation SmFederation::from_long_name(const std::string& str) {
     return federation_to_long_name_table.at(str);
 }

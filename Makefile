@@ -8,25 +8,20 @@ BINARY = $(addprefix $(BUILDDIR)/,$(PROJECTNAME))
 HEADERDIR := $(SOURCEDIR)/
 BINARYSOURCES := $(shell find src/ -type f -name "*.cpp" -not -path "src/$(PROJECTNAME)/*.cpp" -not -path "./**/$(PROJECTNAME)-tests/*.cpp")
 
-NULLPIPE =
-
 RELEASE ?= false
 AGGRESSIVE_OPTIMIZE ?= false
 STRICT ?= false
 BIT_WIDTH ?= $(shell getconf LONG_BIT)
 
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -Wno-error=attributes -Wno-error=pointer-arith -Wno-deprecated-copy -m$(BIT_WIDTH)
+LIBS =
 CC_NAME =
 ERROR =
 
-ifneq ($(shell echo | $(CXX) -dM -E - | grep "__clang__"),)
-	CC_NAME = clang
-else
-	ifneq ($(shell echo | $(CXX) -dM -E - | grep "__GNUC__"),)
-		CC_NAME = gnu
-	else
-		ERROR = EITHER CLANG OR GCC IS REQUIRED TO COMPILE $(PROJECTNAME).
-	endif
+HAS_LIBUNWIND := $(shell pkg-config --libs libunwind-generic 2> /dev/null > /dev/null && echo 1 || echo 0)
+
+ifeq ($(HAS_LIBUNWIND),1)
+	LIBS += $(shell pkg-config --libs libunwind-generic) 
 endif
 
 ifeq ($(RELEASE), false)
@@ -65,26 +60,20 @@ ifeq ($(STRICT), true)
 					   -Wno-variadic-macros -Wno-parentheses -fdiagnostics-show-option
 endif
 
-ifneq ($(OS), Windows_NT)
-	NULLPIPE = /dev/null
-else
-	SYS := $(shell $(CXX) -dumpmachine)
-
-	NULLPIPE = NUL
-endif
-
 ifneq ($(LD),)
 	ifneq ($(LD),ld)
 		CFLAGS += -fuse-ld=$(LD)
 	endif
 endif
 
+TESTEXECS := $(patsubst tests/%.cpp,$(BUILDDIR)/%.out,$(wildcard tests/*.cpp))
+
 main: mac_clean help
 build: check_errors init $(BINARY)
 
 .PHONY: init
 init:
-	@-mkdir -p $(BUILDDIR) 2> $(NULLPIPE)
+	@-mkdir -p $(BUILDDIR) 2> /dev/null
 
 .PHONY: clean
 clean: mac_clean
@@ -106,25 +95,28 @@ ifneq ($(ERROR),)
 	$(error [ERROR] $(ERROR))
 endif
 
-$(BINARY): $(BINARYSOURCES) lib$(PROJECTNAME).a
-	$(CXX) $(CFLAGS) $(BINARYSOURCES) -I$(HEADERDIR) -L$(BUILDDIR) -l$(PROJECTNAME) -o $@
+$(BINARY): $(BINARYSOURCES) lib$(PROJECTNAME).so
+	$(CXX) $(CFLAGS) $(BINARYSOURCES) -I$(HEADERDIR) -L$(BUILDDIR) -l$(PROJECTNAME) $(LIBS) -o $@.1
+
+	echo -e '#!/bin/bash\nexport LD_LIBRARY_PATH="$$LD_LIBRARY_PATH:$(shell pwd)/$(BUILDDIR)/"\n$(shell pwd)/$@.1' > $@
+	chmod +x $@
 
 $(OBJECTS): $(SOURCES)
 
 $(BUILDDIR)/%.o: $(SOURCEDIR)/$(PROJECTNAME)/%.cpp
-	$(CXX) $(CFLAGS) -fPIE -I$(HEADERDIR) -c $< -o $@
+	$(CXX) $(CFLAGS) -fPIC -I$(HEADERDIR) -c $< -o $@
 
-lib$(PROJECTNAME).a: $(OBJECTS)
-	ar -crs $(BUILDDIR)/lib$(PROJECTNAME).a $(OBJECTS)
-	ranlib $(BUILDDIR)/lib$(PROJECTNAME).a
+lib$(PROJECTNAME).so: $(OBJECTS)
+	$(CC) $(CFLAGS) -shared -o $(BUILDDIR)/$@ $^ $(LIBS)
 
-$(BUILDDIR)/%.o: $(LIBSOURCEDIR)/%.c
-	$(CXX) $(CFLAGS) -fPIE -I$(HEADERDIR) -c $< -o $@
+$(BUILDDIR)/%.out: tests/%.cpp $(BINARY)
+	$(CXX) $(CFLAGS) -I$(HEADERDIR) -L $(BUILDDIR) -o $@.test.1 $< -l$(PROJECTNAME) $(LIBS)
 
-.PHONY: test
-test: $(TESTEXECS) lib$(PROJECTNAME).a
-	find . -type f -path "./tests/*.cpp" -exec $(CXX) $(CFLAGS) -I$(HEADERDIR) -L $(BUILDDIR) -o {}.out {} -l$(PROJECTNAME) \;
-	./test.sh tests/
+	echo -e '#!/bin/bash\nexport LD_LIBRARY_PATH="$$LD_LIBRARY_PATH:$(shell pwd)/$(BUILDDIR)/"\n$(shell pwd)/$@.test.1' > $@.test
+	chmod +x $@.test
+
+test: $(TESTEXECS)
+	./test.sh $(BUILDDIR)
 	rm -fdr *.tmp
 
 SEPARATOR = "--------------------"

@@ -1,4 +1,4 @@
-#include "title.hpp"
+#include "include/title.hpp"
 
 #include <algorithm>
 #include <map>
@@ -28,15 +28,15 @@ static const std::map<SmFideTitle, u16> fide_title_to_rating_table = {
     {SmFideTitle(SmFideTitlesEnum::GM), 2300},
 };
 
-std::string SmFideTitle::to_string() const {
+std::string& SmFideTitle::to_string() const {
     auto value = std::find_if(
         fide_title_to_string_table.begin(), fide_title_to_string_table.end(),
         [this](const auto& m) { return m.second == this->value; });
 
-    return value->first;
+    return const_cast<std::string&>(value->first);
 }
 
-SmFideTitle SmFideTitle::from_string(std::string str) {
+SmFideTitle SmFideTitle::from_string(const std::string& str) {
     return fide_title_to_string_table.at(str);
 }
 

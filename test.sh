@@ -1,9 +1,11 @@
 #!/bin/bash
 
+# set -xe
+
 FAILED="Failed!"
 PASSED="Passed!"
 
-TESTS=$(find . -type f -perm /111 -path "./$(basename $1)/*")
+TESTS=$(find . -type f -perm /111 -path "./$1/*.test")
 
 I=1
 FAILED_X=0

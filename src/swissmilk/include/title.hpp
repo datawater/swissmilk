@@ -29,8 +29,8 @@ class SmFideTitle {
     SmFideTitlesEnum value;
 
    public:
-    std::string to_string() const;
-    static SmFideTitle from_string(std::string str);
+    std::string& to_string() const;
+    static SmFideTitle from_string(const std::string& str);
 
     u16 to_rating() const;
 

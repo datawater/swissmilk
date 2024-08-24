@@ -1,14 +1,9 @@
 #include <cstdlib>
-#include <iostream>
 
-#include "swissmilk/federations.hpp"
-#include "swissmilk/rating.hpp"
-#include "swissmilk/swissmilk.hpp"
-#include "swissmilk/title.hpp"
+#include "swissmilk/include/utils.hpp"
 
 int main() {
-    fprintf(stderr, "TODO: Implement CLI\n");
-    abort();
+    SM_TODO("Implement CLI");
 
     return 0;
 }
