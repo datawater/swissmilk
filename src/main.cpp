@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-#include "swissmilk/include/utils.hpp"
+#include "include/utils.hpp"
 
 int main() {
     SM_TODO("Implement CLI");

@@ -204,9 +204,6 @@ class SmFederation {
         return this->get_value() == rhs.get_value();
     }
 
-    inline SmFederation& operator=(SmFederation& rhs) = default;
-    inline SmFederation& operator=(const SmFederation& rhs) = default;
-
     friend std::ostream& operator<<(std::ostream& out, SmFederation& fed) {
         out << std::string("SmFederation { value: '") << fed.to_string()
             << std::string("' }");

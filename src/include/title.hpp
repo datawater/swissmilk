@@ -42,8 +42,6 @@ class SmFideTitle {
         return this->get_value() == rhs.get_value();
     }
 
-    inline SmFideTitle& operator=(SmFideTitle& rhs) = default;
-    inline SmFideTitle& operator=(const SmFideTitle& rhs) = default;
     inline bool operator<(const SmFideTitle& rhs) const {
         return this->value < rhs.value;
     }

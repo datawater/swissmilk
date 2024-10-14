@@ -17,8 +17,6 @@ jobs:
     - name: Build (Debug)
       run: make build -j
     - name: Build (Release)
-      run: make clean && make build -j RELEASE=true
-    - name: Build (Release, Aggressive optimize)
-      run: make clean && make build -j RELEASE=true AGGRESSIVE_OPTIMIZE=true
+      run: make clean && make build -j PROFILE=rekease
     - name: Test
-      run: make clean && make build test -j
+      run: make clean && make test -j

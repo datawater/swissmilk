@@ -13,9 +13,10 @@
 #endif  // NO_BACKTRACE
 #endif  // __has_include
 
-#if defined(HAS_LIBUNWIND)  // USE_EXECINFO
+#if defined(HAS_LIBUNWIND) 
 
 #define USE_LIBUNWIND
+#define UNW_LOCAL_ONLY
 #include <libunwind.h>
 
 #endif  // defined(HAS_LIBUNWIND)

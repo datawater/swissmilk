@@ -1,9 +1,13 @@
-#include <iostream>
-#include <string>
+#include "../src/include/swissmilk.hpp"
+#include "tests.h"
 
-#include "../src/swissmilk/include/swissmilk.hpp"
+#define WORKSHY_ASSERT(expression) \
+    do {\
+        if (!(expression))\
+            return new_result_error(nullptr);\
+    } while(0)
 
-int main() {
+result_t test_try_guess_k() {
     SmPlayer player_underage = SmPlayer(
         "Underage Player", SmFederation::from_string("NON"), 1800,
         SmFideTitle::from_string("WCM"), 2010, 0, SmRatingType::Classical);
@@ -20,8 +24,10 @@ int main() {
         "Underage Player", SmFederation::from_string("NON"), 2401,
         SmFideTitle::from_string("WCM"), 2010, 0, SmRatingType::Classical);
 
-    std::cout << std::to_string((int)player_underage.get_k()) << "\n";
-    std::cout << std::to_string((int)player_rapid.get_k()) << "\n";
-    std::cout << std::to_string((int)player_under_2400.get_k()) << "\n";
-    std::cout << std::to_string((int)player_over_2400.get_k()) << "\n";
+    WORKSHY_ASSERT(40 == (int)player_underage.get_k());
+    WORKSHY_ASSERT(20 == (int)player_rapid.get_k());
+    WORKSHY_ASSERT(20 == (int)player_under_2400.get_k());
+    WORKSHY_ASSERT(10 == (int)player_over_2400.get_k());
+    
+    return new_result_ok();
 }
