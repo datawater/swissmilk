@@ -25,4 +25,4 @@ jobs:
       run: make -j -B PROFILE=release
     
     - name: Test
-      run: make test -j -B && ./tests/run_tests
+      run: make test PROFILE=release -B && ./tests/run_tests
