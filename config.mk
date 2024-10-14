@@ -1,7 +1,6 @@
-CXXFLAGS_WARNINGS = -Wall -Wextra -Werror -pedantic -Wstrict-aliasing -Wno-pointer-arith \
-					-Wno-variadic-macros -Wno-unused-command-line-argument -Wno-erorr=cpp \
-					-Wno-write-strings -Wno-error=unused-variable -Wno-unknown-warning-option \
-					-Wno-error=format-security
+CXXFLAGS_WARNINGS = -Wall -Wextra -pedantic -Wstrict-aliasing -Wno-pointer-arith \
+					-Wno-variadic-macros -Wno-unused-command-line-argument \
+					-Wno-write-strings -Wno-unknown-warning-option
 CXXFLAGS = $(CXXFLAGS_WARNINGS) -std=c++17
 LIBS = -lunwind
 
