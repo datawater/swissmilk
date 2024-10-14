@@ -1,4 +1,4 @@
-name: Build and Test
+name: build and test
 
 on:
   push:
@@ -10,13 +10,19 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
+
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    
     - name: Build (Debug)
-      run: make -j
+      run: make -j -B
+    
     - name: Build (Release)
-      run: make clean && make -j PROFILE=release
+      run: make -j -B PROFILE=release
+    
     - name: Test
-      run: make clean && make test -j && ./tests/run_tests
+      run: make test -j -B && ./tests/run_tests
