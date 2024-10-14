@@ -3,12 +3,16 @@ SwissMilk - FIDE Specification compatible Dutch pairing system library and a tou
 
 ### Building
 ```bash
-make build RELEASE=true AGGRESSIVE_OPTIMIZE=true
+make PROFILE=release
+make test PROFILE=release
+./tests/run_tests
 ```
 
 For debug builds
 ```bash
-make build
+make
+make test
+./tests/run_tests
 ```
 
 ### License

@@ -13,7 +13,7 @@
 #endif  // NO_BACKTRACE
 #endif  // __has_include
 
-#if defined(HAS_LIBUNWIND) 
+#if defined(HAS_LIBUNWIND)
 
 #define USE_LIBUNWIND
 #define UNW_LOCAL_ONLY

@@ -1,11 +1,10 @@
 #include "../src/include/swissmilk.hpp"
 #include "tests.h"
 
-#define WORKSHY_ASSERT(expression) \
-    do {\
-        if (!(expression))\
-            return new_result_error(nullptr);\
-    } while(0)
+#define WORKSHY_ASSERT(expression)                           \
+    do {                                                     \
+        if (!(expression)) return new_result_error(nullptr); \
+    } while (0)
 
 result_t test_try_guess_k() {
     SmPlayer player_underage = SmPlayer(
@@ -28,6 +27,6 @@ result_t test_try_guess_k() {
     WORKSHY_ASSERT(20 == (int)player_rapid.get_k());
     WORKSHY_ASSERT(20 == (int)player_under_2400.get_k());
     WORKSHY_ASSERT(10 == (int)player_over_2400.get_k());
-    
+
     return new_result_ok();
 }

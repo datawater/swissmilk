@@ -92,16 +92,13 @@ class SmPlayer {
     }
 
     bool operator==(SmPlayer& rhs) {
-        return (this->rating == rhs.rating && this->title == rhs.title && this->name == rhs.name);
+        return (this->rating == rhs.rating && this->title == rhs.title &&
+                this->name == rhs.name);
     }
 
-    bool operator<=(SmPlayer& rhs) {
-        return (*this < rhs && *this == rhs);
-    }
+    bool operator<=(SmPlayer& rhs) { return (*this < rhs && *this == rhs); }
 
-    bool operator>=(SmPlayer& rhs) {
-        return (*this > rhs && *this == rhs);
-    }
+    bool operator>=(SmPlayer& rhs) { return (*this > rhs && *this == rhs); }
 
     bool operator!=(SmPlayer& rhs) { return !(*this == rhs); }
 
@@ -150,7 +147,9 @@ class SmPlayerInTournament : public SmPlayer {
    public:
     inline f32 get_score() { return static_cast<f32>(this->score) / 2; }
     [[deprecated]] inline u8* get_score_mut() { return &this->score; }
-    inline void set_score(f32 score) { this->score = static_cast<u8>(score * 2); }
+    inline void set_score(f32 score) {
+        this->score = static_cast<u8>(score * 2);
+    }
 
     inline f32 get_performance_rating() { return this->performance_rating; }
     inline f32* get_performance_rating_mut() {

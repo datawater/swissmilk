@@ -106,7 +106,6 @@ f32 SmPlayer::rating_change_after_game(SmPlayer* other, SmGameResult result) {
 // https://en.wikipedia.org/wiki/Performance_rating_(chess)#Calculation
 f32 SmPlayerInTournament::calculate_performance_rating_binary_search(
     f32 epsilon) {
-
     f32 low = 0.0f;
     f32 high = 4000.0f;
     f32 mid = 0.0f;
@@ -140,11 +139,13 @@ f32 SmPlayerInTournament::calculate_performance_rating_binary_search(
 // https://handbook.fide.com/chapter/B022017
 f32 SmPlayerInTournament::calculate_performance_rating_fide() {
     auto history = this->history->get_rounds();
-    
-    f32 average = std::accumulate(
-        history->begin(), history->end(), 0.0f, [&](f32 sum, const auto& x) {
-            return sum + x.first->get_rating();
-        }) / history->size();
 
-    return average + p_to_dp_table[static_cast<u16>(this->score / 2 / history->size() * 100)];
+    f32 average = std::accumulate(history->begin(), history->end(), 0.0f,
+                                  [&](f32 sum, const auto& x) {
+                                      return sum + x.first->get_rating();
+                                  }) /
+                  history->size();
+
+    return average + p_to_dp_table[static_cast<u16>(this->score / 2 /
+                                                    history->size() * 100)];
 }
