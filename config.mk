@@ -1,14 +1,16 @@
+FORTIFY_SOURCE ?=1
+
 CXXFLAGS_WARNINGS = -Wall -Wextra -pedantic -Wstrict-aliasing -Wno-pointer-arith \
 					-Wno-variadic-macros -Wno-unused-command-line-argument \
 					-Wno-write-strings -Wno-unknown-warning-option
-CXXFLAGS = $(CXXFLAGS_WARNINGS) -std=c++17
+CXXFLAGS = $(CXXFLAGS_WARNINGS) -std=gnu++17 -D_FORTIFY_SOURCE=$(FORTIFY_SOURCE)
 LIBS = -lunwind
 
-GLIBC_VERSION := $(shell getconf GNU_LIBC_VERSION | tail -c +7)
+GLIBC_VERSION := $(shell getconf GNU_LIBC_VERSION 2> /dev/null | tail -c +7)
 LRT_REQUIRED_VERSION := 2.17
 LRT_IS_REQUIRED := $(shell printf "%s\n" $(LRT_REQUIRED_VERSION) $(GLIBC_VERSION) | sort | head -n1)
 
-PROFILE_DEBUG_CXXFLAGS := -ggdb -O0
+PROFILE_DEBUG_CXXFLAGS := -ggdb -O0 -DDEBUG
 PROFILE_RELEASE_CXXFLAGS := -O3 -s -flto -mtune=native -march=native -fgraphite-identity
 PROFILE_SIZE_CXXFLAGS := -Oz -s
 

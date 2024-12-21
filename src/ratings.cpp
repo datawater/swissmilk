@@ -48,7 +48,7 @@ SmDevelopmentCoefficientK SmPlayer::try_guess_k(SmRatingType type) {
         return SmDevelopmentCoefficientK::K20;
     }
 
-    if (current_year - birth_year < 18 && this->rating < 2300) {
+    if (current_year - birth_year <= 18 && this->rating < 2300) {
         return SmDevelopmentCoefficientK::K40;
     }
 
@@ -114,7 +114,7 @@ f32 SmPlayerInTournament::calculate_performance_rating_binary_search(
     f32 actual_score = std::accumulate(
         history->begin(), history->end(), 0.0f, [&](f32 sum, const auto& x) {
             return sum + expected_score_again_player_rating_based(
-                             this->get_rating(), x.first->get_rating());
+                             this->get_rating(), x.second->get_rating());
         });
 
     while ((high - low) > epsilon) {
@@ -123,7 +123,7 @@ f32 SmPlayerInTournament::calculate_performance_rating_binary_search(
             history->begin(), history->end(), 0.0f,
             [&](f32 sum, const auto& x) {
                 return sum + expected_score_again_player_rating_based(
-                                 mid, x.first->get_rating());
+                                 mid, x.second->get_rating());
             });
 
         if (expected_score_mid < actual_score) {
@@ -142,7 +142,7 @@ f32 SmPlayerInTournament::calculate_performance_rating_fide() {
 
     f32 average = std::accumulate(history->begin(), history->end(), 0.0f,
                                   [&](f32 sum, const auto& x) {
-                                      return sum + x.first->get_rating();
+                                      return sum + x.second->get_rating();
                                   }) /
                   history->size();
 
