@@ -18,28 +18,17 @@ class SmPlayer {
 
     u32 fide_id;
 
-    // NOTE: Becuse of only using u8, this will have an y2155 bug, but I doubt
-    // that this will be used in 2155.
+    // NOTE: Becuse of only using u8, this will have an y2155 bug, 
+    //       but I doubt that this will be used in 2155.
     u8 birth_year;
 
     SmDevelopmentCoefficientK k;
 
    public:
-    inline std::string& get_name() const {
-        return const_cast<std::string&>(this->name);
-    };
-    inline std::string* get_name_mut() { return &this->name; };
-    inline void set_name(const std::string& name) { this->name = name; };
+    SM_DEFINE_GETTER_SETTER(std::string, name)
 
-    inline SmFederation get_federation() const { return this->federation; }
-    inline SmFederation* get_federation_mut() { return &this->federation; }
-    inline void set_federation(SmFederation federation) {
-        this->federation = federation;
-    }
-
-    inline f32 get_rating() const { return this->rating; };
-    inline f32* get_rating_mut() { return &this->rating; };
-    inline void set_rating(f32 rating) { this->rating = rating; };
+    SM_DEFINE_GETTER_SETTER(SmFederation, federation)
+    SM_DEFINE_GETTER_SETTER(f32, rating)
 
     inline u16 get_birth_year() const { return 1900 + (u16)this->birth_year; };
     [[deprecated]] inline u8* get_birth_year_mut() {
@@ -50,17 +39,9 @@ class SmPlayer {
         this->birth_year = birth_year - 1900;
     };
 
-    inline u32 get_fide_id() const { return this->fide_id; };
-    inline u32* get_fide_id_mut() { return &this->fide_id; };
-    inline void set_fide_id(u32 fide_id) { this->fide_id = fide_id; };
-
-    inline SmDevelopmentCoefficientK get_k() const { return this->k; }
-    inline SmDevelopmentCoefficientK* get_k_mut() { return &this->k; }
-    inline void set_k(SmDevelopmentCoefficientK k) { this->k = k; }
-
-    inline SmFideTitle get_fide_title() const { return this->title; };
-    inline SmFideTitle* get_fide_title_mut() { return &this->title; };
-    inline void set_fide_title(SmFideTitle title) { this->title = title; };
+    SM_DEFINE_GETTER_SETTER(u32, fide_id)
+    SM_DEFINE_GETTER_SETTER(SmDevelopmentCoefficientK, k)
+    SM_DEFINE_GETTER_SETTER(SmFideTitle, title)
 
     SmDevelopmentCoefficientK try_guess_k(SmRatingType type);
 
@@ -70,7 +51,7 @@ class SmPlayer {
     friend std::ostream& operator<<(std::ostream& out, SmPlayer& player) {
         out << std::string("SmPlayer {\n\tname: '") << player.name
             << std::string("'\n\trating: ") << std::to_string(player.rating)
-            << std::string("\n\ttitle: ") << player.get_fide_title().to_string()
+            << std::string("\n\ttitle: ") << player.get_title().to_string()
             << std::string("\n\tfederation: ")
             << player.get_federation().to_string()
             << std::string("\n\tk_value: ")
@@ -151,14 +132,8 @@ class SmPlayerInTournament : public SmPlayer {
         this->score = static_cast<u8>(score * 2);
     }
 
-    inline f32 get_performance_rating() { return this->performance_rating; }
-    inline f32* get_performance_rating_mut() {
-        return &this->performance_rating;
-    }
-    inline void set_performance_rating(f32 performance_rating) {
-        this->performance_rating = performance_rating;
-    }
-
+    SM_DEFINE_GETTER_SETTER(f32, performance_rating)
+    
     f32 calculate_performance_rating_binary_search(f32 epsilon = 0.0001);
     f32 calculate_performance_rating_fide();
 
@@ -168,7 +143,7 @@ class SmPlayerInTournament : public SmPlayer {
         this->set_birth_year(player.get_birth_year());
         this->set_federation(player.get_federation());
         this->set_fide_id(player.get_fide_id());
-        this->set_fide_title(player.get_fide_title());
+        this->set_title(player.get_title());
         this->set_k(player.get_k());
         this->set_rating(player.get_rating());
 
@@ -182,7 +157,7 @@ class SmPlayerInTournament : public SmPlayer {
         this->set_birth_year(player.get_birth_year());
         this->set_federation(player.get_federation());
         this->set_fide_id(player.get_fide_id());
-        this->set_fide_title(player.get_fide_title());
+        this->set_title(player.get_title());
         this->set_k(player.get_k());
         this->set_rating(player.get_rating());
 
@@ -194,7 +169,7 @@ class SmPlayerInTournament : public SmPlayer {
         this->set_name(std::string());
         this->set_federation(SmFederation(SmFederationsEnum::NON));
         this->set_rating(0);
-        this->set_fide_title(SmFideTitle(SmFideTitlesEnum::NoTitle));
+        this->set_title(SmFideTitle(SmFideTitlesEnum::NoTitle));
         this->set_k(SmDevelopmentCoefficientK::K40);
         this->set_fide_id(0);
         this->score = 0;

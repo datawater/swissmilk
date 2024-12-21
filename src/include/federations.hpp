@@ -182,7 +182,7 @@ enum class SMATTR_PACKED SmFederationsEnum {
 };
 
 /**
- * @brief An enum-like class that represents a FIDE recognized federation
+ * An enum-like class that represents a FIDE recognized federation
  *
  */
 class SmFederation {

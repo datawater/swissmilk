@@ -1,26 +1,19 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
-#include <set>
+#include <unordered_set>
 
 #include "player.hpp"
+#include "utils.hpp"
 
 class Tournament {
    private:
-    std::vector<SmPlayerInTournament*> players;
+    std::unordered_set<SmPlayerInTournament*> players;
     u8 amount_of_rounds;
 
    public:
-    inline std::vector<SmPlayerInTournament*>* get_players() {
-        return &this->players;
-    }
-
-    inline u8 get_amount_of_rounds() { return this->amount_of_rounds; }
-    inline u8* get_amount_of_rounds_mut() { return &this->amount_of_rounds; }
-    inline void set_amount_of_rounds(u8 amount_of_rounds) {
-        this->amount_of_rounds = amount_of_rounds;
-    }
+    SM_DEFINE_GETTER_SETTER(u8, amount_of_rounds)
+    SM_DEFINE_GETTER(std::unordered_set<SmPlayerInTournament*>, players)
 
     inline void add_player_to_tournament(SmPlayer* player) {
         assert(player != nullptr);

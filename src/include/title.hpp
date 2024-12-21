@@ -9,19 +9,19 @@
 
 enum class SMATTR_PACKED SmFideTitlesEnum {
     GM = 6,
-    WGM = 4,
     IM = 5,
+    WGM = 4,
     WIM = 3,
-    FM = 4,
-    WFM = 2,
+    FM = 4, 
     CM = 3,
+    WFM = 2,
     WCM = 1,
 
     NoTitle = 0
 };
 
 /**
- * @brief A Class representing a FIDE given title.
+ * A Class representing a FIDE given title.
  *
  */
 class SmFideTitle {
@@ -45,6 +45,7 @@ class SmFideTitle {
     inline bool operator<(const SmFideTitle& rhs) const {
         return this->value < rhs.value;
     }
+
     inline bool operator>(const SmFideTitle& rhs) const {
         return this->value > rhs.value;
     }
@@ -56,6 +57,5 @@ class SmFideTitle {
     }
 
     inline SmFideTitle() { this->value = SmFideTitlesEnum::NoTitle; }
-
     inline SmFideTitle(SmFideTitlesEnum value) { this->value = value; }
 };

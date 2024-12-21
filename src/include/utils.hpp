@@ -56,6 +56,19 @@
         SM_ERROR(__error_str);                                            \
     } while (0);
 
+#define SM_DEFINE_GETTER(type, name) \
+    type get_##name() const { return name; }
+
+#define SM_DEFINE_GETTER_CONST_PTR(type, name) \
+    const type *get_##name() const { return static_cast<const type *>(&name); }
+
+#define SM_DEFINE_SETTER(type, name) \
+    void set_##name(const type &value) { name = value; }
+
+#define SM_DEFINE_GETTER_SETTER(type, name) \
+    SM_DEFINE_GETTER(type, name)            \
+    SM_DEFINE_SETTER(type, name)
+
 typedef unsigned int uint;
 typedef int8_t i8;
 typedef int16_t i16;

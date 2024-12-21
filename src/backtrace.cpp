@@ -9,7 +9,7 @@
 
 // https://stackoverflow.com/a/62160937
 auto cpp_demangle(const char *abiName) {
-    int status;
+    int status = 0;
     char *ret = abi::__cxa_demangle(abiName, 0 /* output buffer */,
                                     0 /* length */, &status);
 
